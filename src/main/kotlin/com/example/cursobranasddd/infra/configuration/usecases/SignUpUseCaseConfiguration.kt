@@ -1,35 +1,20 @@
-package br.com.creditas.fundingeligibility.infrastructure.configuration.usecases
+package com.example.cursobranasddd.infra.configuration.usecases
 
-import br.com.creditas.fundingeligibility.core.application.collateral.create.CollateralCreationUseCase
-import br.com.creditas.fundingeligibility.core.application.collateral.create.MissingCollateralsCreationUseCase
-import br.com.creditas.fundingeligibility.core.domain.collateral.CollateralGateway
-import br.com.creditas.fundingeligibility.core.domain.collateral.CollateralRepository
-import br.com.creditas.fundingeligibility.core.domain.events.IEventDispatcher
-import br.com.creditas.fundingeligibility.core.domain.loan.LoanRepository
+import com.example.cursobranasddd.core.application.SignUpUseCase
+import com.example.cursobranasddd.core.domain.entity.account.AccountRepository
+import com.example.cursobranasddd.core.domain.gateway.MailerGateway
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
 @Configuration
-class CollateralUseCaseConfiguration(
-    private val collateralRepository: CollateralRepository,
-    private val collateralGateway: CollateralGateway,
-    private val loanRepository: LoanRepository,
-    private val eventDispatcher: IEventDispatcher
+class SignUpUseCaseConfiguration(
+    private val accountRepository: AccountRepository,
+    private val mailerGateway: MailerGateway
 ) {
 
     @Bean
-    fun collateralCreationUseCase() = CollateralCreationUseCase(
-        collateralRepository,
-        collateralGateway,
-        loanRepository,
-        eventDispatcher
-    )
-
-    @Bean
-    fun missingCollateralsCreationUseCase() = MissingCollateralsCreationUseCase(
-        loanRepository,
-        collateralGateway,
-        collateralRepository,
-        eventDispatcher
+    fun signUpUseCase() = SignUpUseCase(
+        accountRepository,
+        mailerGateway,
     )
 }

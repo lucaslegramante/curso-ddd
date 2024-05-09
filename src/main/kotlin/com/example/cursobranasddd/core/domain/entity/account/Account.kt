@@ -1,28 +1,25 @@
-package com.example.cursobranasddd.core.domain.entity
+package com.example.cursobranasddd.core.domain.entity.account
 
-import com.example.cursobranasddd.core.domain.InstantUtils
-import com.example.cursobranasddd.core.domain.entity.entities.AggregateRoot
-import com.example.cursobranasddd.core.domain.entity.entities.Identifier
+import com.example.cursobranasddd.core.domain.entities.AggregateRoot
+import com.example.cursobranasddd.core.domain.entities.Identifier
+import com.example.cursobranasddd.core.domain.support.InstantUtils
 import com.example.cursobranasddd.core.domain.vo.CarPlate
 import com.example.cursobranasddd.core.domain.vo.Cpf
 import com.example.cursobranasddd.core.domain.vo.Email
 import com.example.cursobranasddd.core.domain.vo.Name
-import java.math.BigDecimal
 import java.time.Instant
-import java.time.LocalDate
 import java.util.UUID
 
 class Account private constructor(
     override val id: Identifier,
-    private val name: Name,
-    private val email: Email,
-    private val cpf: Cpf,
-    private val carPlate: CarPlate?,
-    private val isPassanger: Boolean,
-    private val isDriver: Boolean,
-
+    val name: Name,
+    val email: Email,
+    val cpf: Cpf,
+    val carPlate: CarPlate,
+    val isPassenger: Boolean,
+    val isDriver: Boolean,
     val createdAt: Instant,
-    var updatedAt: Instant
+    var updatedAt: Instant,
 ) : AggregateRoot<Identifier>(id) {
 
     companion object {
@@ -30,9 +27,9 @@ class Account private constructor(
             name: Name,
             email: Email,
             cpf: Cpf,
-            carPlate: CarPlate?,
-            isPassanger: Boolean,
-            isDriver: Boolean
+            carPlate: CarPlate,
+            isPassenger: Boolean,
+            isDriver: Boolean,
         ) = Pair(Identifier.unique(), InstantUtils.now()).let { (id, now) ->
             Account(
                 id = id,
@@ -40,55 +37,33 @@ class Account private constructor(
                 email = email,
                 cpf = cpf,
                 carPlate = carPlate,
-                isPassanger = isPassanger,
+                isPassenger = isPassenger,
                 isDriver = isDriver,
                 createdAt = now,
-                updatedAt = now
+                updatedAt = now,
             )
         }
 
-        // na funcao new, deveria receber string e a propria account converter para o value object?
-
-        fun from(
+        fun restore(
             id: UUID,
-            platformId: String,
-            creditCertificateNumber: String,
-            financedAmount: BigDecimal,
-            issueDate: LocalDate,
-            productType: String,
-            indexType: String?,
-            gracePeriod: Int,
-            creditorPlatformId: String,
-            loanGroupId: UUID?,
-            protocoledAt: LocalDate?,
-            status: LoanStatus,
+            name: Name,
+            email: Email,
+            cpf: Cpf,
+            carPlate: CarPlate,
+            isPassenger: Boolean,
+            isDriver: Boolean,
             createdAt: Instant,
             updatedAt: Instant,
-            withAssignmentIntention: Boolean,
-            underwriterPlatformId: String,
-            tacAmount: BigDecimal?,
-            restructurings: MutableList<Restructuring>
-        ): Loan = Loan(
+        ): Account = Account(
             id = Identifier.from(id),
-            platformId = platformId,
-            creditCertificateNumber = creditCertificateNumber,
-            financedAmount = financedAmount,
-            issueDate = issueDate,
-            productType = productType,
-            indexType = indexType,
-            gracePeriod = gracePeriod,
-            creditorPlatformId = creditorPlatformId,
-            loanGroupId = loanGroupId,
-            protocoledAt = protocoledAt,
-            status = status,
+            name = name,
+            email = email,
+            cpf = cpf,
+            carPlate = carPlate,
+            isPassenger = isPassenger,
+            isDriver = isDriver,
             createdAt = createdAt,
             updatedAt = updatedAt,
-            withAssignmentIntention = withAssignmentIntention,
-            underwriterPlatformId = underwriterPlatformId,
-            tacAmount = tacAmount,
-            restructurings = restructurings
         )
-
-        private fun gracePeriod(firstInstallmentDueDate: LocalDate, issueDate: LocalDate): Int =
-            DateUtils.diffInDaysBetween(issueDate, firstInstallmentDueDate)
     }
+}

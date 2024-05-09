@@ -1,4 +1,4 @@
-package com.example.cursobranasddd.core.domain.entity.entities
+package com.example.cursobranasddd.core.domain.entities
 
 import br.com.creditas.fundingeligibility.core.domain.entities.ValueObject
 import java.util.Locale
@@ -9,6 +9,8 @@ class Identifier(
 ) : ValueObject {
 
     fun getValue(): Identifier { return this }
+
+    fun toUUID() = UUID.fromString(value)
 
     init {
         runCatching {

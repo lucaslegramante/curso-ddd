@@ -1,19 +1,36 @@
 package com.example.cursobranasddd.core.application
 
+import com.example.cursobranasddd.CursoBranasDddApplication
 import com.example.cursobranasddd.core.domain.entity.account.AccountRepository
 import com.example.cursobranasddd.core.domain.gateway.MailerGateway
-import io.mockk.mockk
-import org.junit.jupiter.api.Assertions.*
+import com.example.cursobranasddd.core.domain.vo.Email
+import com.example.cursobranasddd.infra.account.AccountRepositoryJpa
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.TestInstance
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.context.SpringBootTest
 
-internal class SignUpUseCaseTest {
+@SpringBootTest(classes = [CursoBranasDddApplication::class])
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+internal class SignUpUseCaseComponentTest {
     @Autowired
-    private val accountRepository: AccountRepository
+    private lateinit var accountRepository: AccountRepository
 
-    private val mailerGateway = mockk<MailerGateway>(relaxed = true)
+    @Autowired
+    private lateinit var accountRepositoryJpa: AccountRepositoryJpa
 
-    private val subject = SignUpUseCase(accountRepository, mailerGateway)
+    @Autowired
+    private lateinit var mailerGateway: MailerGateway
+
+    @Autowired
+    private lateinit var subject: SignUpUseCase
+
+    @AfterEach
+    fun tearDown() {
+        accountRepositoryJpa.deleteAll()
+    }
 
     @Test
     fun `should create a new account and send email`() {
@@ -27,7 +44,13 @@ internal class SignUpUseCaseTest {
         )
         subject.execute(command)
 
-        assertEquals(1, accountRepository.findAll().size)
-        assertEquals(1, mailerGateway.invocationsCount)
+        val result = accountRepository.findByEmail(Email.restore(command.email))!!
+
+        assertEquals(result.email.getValue(), command.email)
+        assertEquals(result.cpf.getValue(), command.cpf)
+        assertEquals(result.name.getValue(), command.name)
+        assertEquals(result.carPlate.getValue(), command.carPlate)
+        assertEquals(result.isDriver, command.isDriver)
+        assertEquals(result.isPassenger, command.isPassenger)
     }
 }

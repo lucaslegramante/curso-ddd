@@ -2,31 +2,32 @@ package com.example.cursobranasddd.core.application
 
 import com.example.cursobranasddd.core.domain.entities.Identifier
 import com.example.cursobranasddd.core.domain.entity.account.AccountRepository
+import java.util.UUID
 
 @UseCaseAnnotation
-class GetAccountuUseCase(
+class GetAccountUseCase(
     private val accountRepository: AccountRepository
-) {
-    fun execute(input: GetAccountCommand) {
-        val account = accountRepository.findById(Identifier.from(input.id))
-        return {
-            accountId: account.accountId,
-            name: account.getName(),
-            email: account.getEmail(),
-            cpf: account.getCpf(),
-            carPlate: account.getCarPlate(),
-            isPassenger: account.isPassenger,
-            isDriver: account.isDriver
-        }
+): UseCase<GetAccountCommand, GetAccountResponse>  {
+    override fun execute(input: GetAccountCommand): GetAccountResponse {
+        val account = accountRepository.findById(Identifier.from(input.id)) ?: throw Exception("Account not found")
+        return GetAccountResponse(
+            accountId = account.id.toUUID(),
+            name = account.name.getValue(),
+            email = account.email.getValue(),
+            cpf = account.cpf.getValue(),
+            carPlate = account.carPlate.getValue(),
+            isPassenger = account.isPassenger,
+            isDriver = account.isDriver
+        )
 }
 }
 
 data class GetAccountCommand(
-    val id: String
+    val id: UUID
 )
 
 data class GetAccountResponse(
-    val accountId: String,
+    val accountId: UUID,
     val name: String,
     val email: String,
     val cpf: String,

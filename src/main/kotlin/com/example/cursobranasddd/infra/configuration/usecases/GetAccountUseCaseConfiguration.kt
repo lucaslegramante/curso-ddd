@@ -1,20 +1,17 @@
 package com.example.cursobranasddd.infra.configuration.usecases
 
-import com.example.cursobranasddd.core.application.SignUpUseCase
+import com.example.cursobranasddd.core.application.GetAccountUseCase
 import com.example.cursobranasddd.core.domain.entity.account.AccountRepository
-import com.example.cursobranasddd.core.domain.gateway.MailerGateway
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
 @Configuration
-class SignUpUseCaseConfiguration(
+class GetAccountUseCaseConfiguration(
     private val accountRepository: AccountRepository,
-    private val mailerGateway: MailerGateway
 ) {
 
     @Bean
-    fun signUpUseCase() = SignUpUseCase(
-        accountRepository,
-        mailerGateway,
+    fun getAccountUseCase() = GetAccountUseCase(
+        accountRepository
     )
 }

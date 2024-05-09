@@ -4,21 +4,19 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 
-internal class NameTest {
+internal class CarPlateTest {
     @Test
-    fun `should create a name`() {
+    fun `should create a car plate`() {
 
-        val name = Name.new("John Doe")
+        val carPlate = CarPlate.new("AAA9999")
 
-        assertThat(name.getValue()).isEqualTo("John Doe")
+        assertThat(carPlate.getValue()).isEqualTo("AAA9999")
     }
 
     @Test
-    fun `should throw exception when name is invalid`() {
+    fun `should throw exception when carPlate is invalid`() {
 
-        val exception = assertThrows<Exception> { Name.new("2313123") }
-        assertThat(exception.message).isEqualTo("Invalid name")
-
-
+        val exception = assertThrows<Error> { CarPlate.new("2313123") }
+        assertThat(exception.message).isEqualTo("Invalid car plate")
     }
 }

@@ -1,4 +1,4 @@
-package br.com.creditas.fundingeligibility.core.application
+package com.example.cursobranasddd.core.application
 
 interface UseCase<IN, OUT> {
     fun execute(input: IN): OUT

@@ -1,9 +1,11 @@
-CREATE TABLE loan_blockings (
+CREATE TABLE account (
     id UUID NOT NULL,
-    credit_certificate_number VARCHAR(100) NOT NULL,
-    reason VARCHAR NOT NULL,
+    name VARCHAR NOT NULL,
+    email VARCHAR NOT NULL,
+    cpf VARCHAR(11) NOT NULL,
+    car_plate VARCHAR NOT NULL,
+    is_passenger BOOLEAN NOT NULL,
+    is_driver BOOLEAN NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE NOT NULL,
-    updated_at TIMESTAMP WITH TIME ZONE NOT NULL,
-    deleted_at TIMESTAMP WITH TIME ZONE,
-    CONSTRAINT loan_blockings_pk PRIMARY KEY (id)
+    updated_at TIMESTAMP WITH TIME ZONE NOT NULL
 );
