@@ -27,7 +27,6 @@ repositories {
     mavenCentral()
 }
 
-val activationVersion = "1.1.1"
 val springMockkVersion = "4.0.2"
 
 dependencies {
@@ -36,7 +35,6 @@ dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.flywaydb:flyway-core")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
-    compileOnly("org.projectlombok:lombok")
     developmentOnly("org.springframework.boot:spring-boot-docker-compose")
     runtimeOnly("org.postgresql:postgresql")
     testImplementation("org.springframework.boot:spring-boot-starter-test")

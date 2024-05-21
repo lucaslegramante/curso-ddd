@@ -1,24 +1,8 @@
+server:
+  port: 8081
 spring:
   application:
     name: curso-branas-ddd
   docker:
     compose:
       file: "./docker-compose.yml"
-  datasource:
-    url: "jdbc:postgresql://localhost:5432/mydatabase"
-    username: postgres
-    password: secret
-    hikari:
-      connectionTimeout: 30000
-      maximumPoolSize: 10
-      minimumIdle: 5
-      idleTimeout: 600000
-      poolName: cursoDDDComponentTestPool
-      maxLifetime: 1800000
-      connectionTestQuery: SELECT 1
-  jpa:
-    properties:
-      hibernate:
-        jdbc:
-          lob:
-            non_contextual_creation: true
