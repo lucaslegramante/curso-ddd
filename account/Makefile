@@ -9,7 +9,7 @@ clean:
 	./gradlew clean
 
 build:clean
-	./gradlew generateAvroJava build
+	./gradlew build
 
 test:
 	./gradlew test

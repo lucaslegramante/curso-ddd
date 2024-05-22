@@ -3,9 +3,9 @@ spring:
     name: account
   docker:
     compose:
-      file: "./docker-compose.yml"
+      file: "./account/docker-compose.yml"
   datasource:
-    url: "jdbc:postgresql://localhost:5432/mydatabase"
+    url: "jdbc:postgresql://localhost:5432/account_database"
     username: postgres
     password: secret
     hikari:
@@ -13,7 +13,7 @@ spring:
       maximumPoolSize: 10
       minimumIdle: 5
       idleTimeout: 600000
-      poolName: cursoDDDComponentTestPool
+      poolName: accountComponentTestPool
       maxLifetime: 1800000
       connectionTestQuery: SELECT 1
   jpa:

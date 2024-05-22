@@ -6,3 +6,9 @@ spring:
   docker:
     compose:
       file: "./docker-compose.yml"
+      lifecycle:
+        timeout: PT5M
+  datasource:
+    url: "jdbc:postgresql://localhost:5430/my_database"
+    username: postgres
+    password: secret
