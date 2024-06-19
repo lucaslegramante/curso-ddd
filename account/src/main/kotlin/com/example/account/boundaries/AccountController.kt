@@ -1,7 +1,6 @@
 package com.example.account.boundaries
 
 import com.example.account.core.application.GetAccountCommand
-import com.example.account.core.application.GetAccountResponse
 import com.example.account.core.application.GetAccountUseCase
 import com.example.account.core.application.SignUpCommand
 import com.example.account.core.application.SignUpResponse
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import java.util.UUID
-
 
 @RestController
 @RequestMapping("/account")
@@ -33,8 +31,12 @@ class AccountController(
     }
 
     @GetMapping("/{id}")
-    fun getAccount(@PathVariable(name = "id") id: UUID): ResponseEntity<GetAccountResponse> {
+    fun getAccount(@PathVariable(name = "id") id: UUID): ResponseEntity<Any> {
         val response = getAccountUseCase.execute(GetAccountCommand(id))
-        return ResponseEntity.status(HttpStatus.OK).body(response)
+        return if (response.hasErrors) {
+            ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response.errors)
+        } else {
+            ResponseEntity.status(HttpStatus.OK).body(response.data)
+        }
     }
 }

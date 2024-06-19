@@ -9,15 +9,22 @@ class GetAccountUseCase(
     private val accountRepository: AccountRepository
 ) : UseCase<GetAccountCommand, GetAccountResponse> {
     override fun execute(input: GetAccountCommand): GetAccountResponse {
-        val account = accountRepository.findById(Identifier.from(input.id)) ?: throw Exception("Account not found")
+        val account = accountRepository.findById(Identifier.from(input.id))
         return GetAccountResponse(
-            accountId = account.id.toUUID(),
-            name = account.name.getValue(),
-            email = account.email.getValue(),
-            cpf = account.cpf.getValue(),
-            carPlate = account.carPlate.getValue(),
-            isPassenger = account.isPassenger,
-            isDriver = account.isDriver
+            data = if (account != null) {
+                GetAccountData(
+                    accountId = account.id.toUUID(),
+                    name = account.name.getValue(),
+                    email = account.email.getValue(),
+                    cpf = account.cpf.getValue(),
+                    carPlate = account.carPlate.getValue(),
+                    isPassenger = account.isPassenger,
+                    isDriver = account.isDriver
+                )
+            } else {
+                null
+            },
+            errors = if (account == null) "Account with id ${input.id} not found" else null
         )
     }
 }
@@ -27,6 +34,14 @@ data class GetAccountCommand(
 )
 
 data class GetAccountResponse(
+    val data: GetAccountData? = null,
+    val errors: String? = null
+) {
+    val hasErrors: Boolean
+        get() = errors != null
+}
+
+data class GetAccountData(
     val accountId: UUID,
     val name: String,
     val email: String,
