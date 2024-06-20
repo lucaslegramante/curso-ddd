@@ -1,6 +1,8 @@
 package com.example.account.boundaries
 
+import com.example.account.core.application.AccountNotFoundException
 import com.example.account.core.application.GetAccountCommand
+import com.example.account.core.application.GetAccountData
 import com.example.account.core.application.GetAccountUseCase
 import com.example.account.core.application.SignUpCommand
 import com.example.account.core.application.SignUpResponse
@@ -30,13 +32,25 @@ class AccountController(
         return ResponseEntity.status(HttpStatus.OK).body(response)
     }
 
+//    @GetMapping("/{id}")
+//    fun getAccount(@PathVariable(name = "id") id: UUID): ResponseEntity<Any> {
+//        val response = getAccountUseCase.execute(GetAccountCommand(id))
+//        return if (response.hasErrors) {
+//            ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response.errors)
+//        } else {
+//            ResponseEntity.status(HttpStatus.OK).body(response.data)
+//        }
+//    }
+
     @GetMapping("/{id}")
-    fun getAccount(@PathVariable(name = "id") id: UUID): ResponseEntity<Any> {
+    fun getAccountV2(@PathVariable(name = "id") id: UUID): ResponseEntity<*> {
         val response = getAccountUseCase.execute(GetAccountCommand(id))
-        return if (response.hasErrors) {
-            ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response.errors)
+        return if (response.isRight) {
+            val response2 = response as AccountNotFoundException
+            ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response2.message)
         } else {
-            ResponseEntity.status(HttpStatus.OK).body(response.data)
+            val response3 = response
+            ResponseEntity.status(HttpStatus.OK).body(response3)
         }
     }
 }

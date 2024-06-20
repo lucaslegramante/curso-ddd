@@ -7,27 +7,33 @@ import java.util.UUID
 @UseCaseAnnotation
 class GetAccountUseCase(
     private val accountRepository: AccountRepository
-) : UseCase<GetAccountCommand, GetAccountResponse> {
-    override fun execute(input: GetAccountCommand): GetAccountResponse {
+) : UseCase<GetAccountCommand, Either<GetAccountData, AccountNotFoundException>> {
+    override fun execute(input: GetAccountCommand): Either<GetAccountData, AccountNotFoundException> {
         val account = accountRepository.findById(Identifier.from(input.id))
-        return GetAccountResponse(
-            data = if (account != null) {
-                GetAccountData(
-                    accountId = account.id.toUUID(),
-                    name = account.name.getValue(),
-                    email = account.email.getValue(),
-                    cpf = account.cpf.getValue(),
-                    carPlate = account.carPlate.getValue(),
-                    isPassenger = account.isPassenger,
-                    isDriver = account.isDriver
-                )
-            } else {
-                null
-            },
-            errors = if (account == null) "Account with id ${input.id} not found" else null
+            ?: return Either.Right(AccountNotFoundException(input.id.toString()))
+        return Either.Left(
+            GetAccountData(
+                accountId = account.id.toUUID(),
+                name = account.name.getValue(),
+                email = account.email.getValue(),
+                cpf = account.cpf.getValue(),
+                carPlate = account.carPlate.getValue(),
+                isPassenger = account.isPassenger,
+                isDriver = account.isDriver
+            )
         )
     }
 }
+
+sealed class Either<out A, out B> {
+    class Left<A>(val value: A) : Either<A, Nothing>()
+    class Right<B>(val value: B) : Either<Nothing, B>()
+
+    val isLeft get() = this is Left<A>
+    val isRight get() = this is Right<B>
+}
+
+data class AccountNotFoundException(val id: String) : Exception("Account with id $id not found")
 
 data class GetAccountCommand(
     val id: UUID
